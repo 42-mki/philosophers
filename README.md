@@ -1,3 +1,0 @@
-# philosophers
-
-Read Wiki
