@@ -6,14 +6,14 @@
 /*   By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/10 20:58:36 by mki               #+#    #+#             */
-/*   Updated: 2021/06/22 13:52:59 by mki              ###   ########.fr       */
+/*   Updated: 2021/06/24 13:39:21 by mki              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
 /*
-**
+** a
 */
 
 int		philo(t_var *v)
@@ -81,7 +81,7 @@ void	free_all(t_var *v)
 ** argv[5] = [number_of_times_each_philosopher_must_eat]
 */
 
-int	main(int argc, char *argv[])
+int		main(int argc, char *argv[])
 {
 	t_var	var;
 
@@ -89,7 +89,6 @@ int	main(int argc, char *argv[])
 		ft_putstr_fd("Wrong arguments\n", 1);
 	else
 	{
-		init(&var);
 		var.num_of_philos = ft_atoi(argv[1]);
 		var.time_to_die = ft_atoi(argv[2]);
 		var.time_to_eat = ft_atoi(argv[3]);
@@ -97,6 +96,7 @@ int	main(int argc, char *argv[])
 		var.time_must_eat = 0;
 		if (argc == 6)
 			var.time_must_eat = ft_atoi(argv[5]);
+		init(&var);
 		if (philo(&var))
 		{
 			free_all(&var);

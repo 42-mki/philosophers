@@ -6,7 +6,7 @@
 /*   By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/10 23:02:57 by mki               #+#    #+#             */
-/*   Updated: 2021/06/22 13:50:39 by mki              ###   ########.fr       */
+/*   Updated: 2021/06/24 13:36:02 by mki              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	print_time_num(int base_time, int number, char *str)
 {
+	base_time = 0;
 	ft_putstr_fd(ft_itoa(get_time()), 1);
 	write(1, " ", 1);
 	ft_putstr_fd(ft_itoa(number), 1);

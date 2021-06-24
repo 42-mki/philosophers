@@ -6,12 +6,12 @@
 /*   By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/10 20:58:46 by mki               #+#    #+#             */
-/*   Updated: 2021/06/22 13:41:23 by mki              ###   ########.fr       */
+/*   Updated: 2021/06/24 13:38:59 by mki              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef MAIN_H
+# define MAIN_H
 
 # include <string.h>
 # include <stdlib.h>
@@ -53,11 +53,11 @@ typedef struct		s_philo
 
 typedef struct		s_var
 {
-	unsigned int	num_of_philos;
-	unsigned int	time_to_die;
-	unsigned int	time_to_eat;
-	unsigned int	time_to_sleep;
-	unsigned int	time_must_eat;
+	int				num_of_philos;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				time_must_eat;
 	unsigned int	base_time;
 	unsigned int	cur_time;
 	t_philo			*philos;

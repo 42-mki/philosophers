@@ -6,7 +6,7 @@
 #    By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/11 14:03:42 by mki               #+#    #+#              #
-#    Updated: 2021/06/12 12:30:02 by mki              ###   ########.fr        #
+#    Updated: 2021/06/24 13:36:50 by mki              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,9 @@ FILES		=	ft_atoi\
 				ft_itoa\
 				ft_putstr_fd\
 				main\
+				mutex\
 				philo\
+				pthread\
 				time
 
 DIR			=	./
