@@ -3,6 +3,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+int		g_i;
+
 void	*thread_routine(void *arg)
 {
 	pthread_t	tid;
@@ -11,10 +13,10 @@ void	*thread_routine(void *arg)
 	i = 0;
 	tid = pthread_self();
 	printf("\ttid:%x\n", (int)tid);
-	while (i < 10)
+	while (g_i < 10)
 	{
-		printf("\tnew thread:%d\n", i);
-		i++;
+		printf("\tnew thread:%d\n", g_i);
+		g_i++;
 		sleep(1);
 	}
 	return (NULL);
@@ -28,10 +30,10 @@ int		main(void)
 	pthread_create(&thread, NULL, thread_routine, NULL);
 	i = 0;
 	printf("tid: %x\n", (int)pthread_self());
-	while (i < 5)
+	while (g_i < 5)
 	{
-		printf("main:%d\n", i);
-		i++;
+		printf("main:%d\n", g_i);
+		g_i++;
 		sleep(1);
 	}
 	pthread_join(thread, NULL);

@@ -6,11 +6,11 @@
 /*   By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 17:59:28 by mki               #+#    #+#             */
-/*   Updated: 2021/06/12 12:30:09 by mki              ###   ########.fr       */
+/*   Updated: 2021/06/22 12:27:35 by mki              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include <stdlib.h>
 
 static size_t	ft_numlen(int n)
 {

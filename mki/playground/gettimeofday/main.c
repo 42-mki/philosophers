@@ -3,40 +3,45 @@
 #include <sys/time.h>
 
 /*
-** Returns the timestamp in milliseconds
+**	#include <sys/time.h>
+**	int
+**	gettimeofday(struct timeval *restrict tp, void *restrict tzp);
+**
+**	struct timeval {
+**		time_t       tv_sec;   seconds since Jan. 1, 1970
+**		suseconds_t  tv_usec;  and microseconds
+**	};
 */
 
-long    get_time(void)
+long	get_time(struct timeval tp)
 {
-    struct timeval  tp;
-    long            milliseconds;
-
-    gettimeofday(&tp, NULL);
-	printf("tv_sec: %ld\n", tp.tv_sec);
-	printf("tv_usec: %u\n", tp.tv_usec);
-    milliseconds = tp.tv_sec * 1000;
-    milliseconds += tp.tv_usec / 1000;
-    return (milliseconds);
+	// printf("tv_sec: %ld tv_usec: %u\n", tp.tv_sec, tp.tv_usec);
+	// printf("milisecond: %lu\n", tp.tv_sec * 1000 + tp.tv_usec / 1000);
+	return (tp.tv_sec * 1000 + tp.tv_usec / 1000);
 }
 
-/*
-** Prints time, sleeps 200ms, repeats!
-*/
-
-int main(void)
+void	sleep_divide(int time)
 {
-    long start_time;
-		
-		// Remember when we started
-    start_time = get_time();
+	while (time)
+	{
+		time /= 2;
+		usleep(time);
+	}
+}
 
-    while (1)
-    {
-				// Print time from start, in ms
-		printf("%ld\t", start_time);
-        printf("%ld\n", get_time() - start_time);
+int		main(void)
+{
+	long			start;
+	struct timeval	tp_start;
+	struct timeval	tp_cur;
 
-				// Sleep 200 times 1000 microseconds (1 millisecond)
-        usleep(200 * 1000);
-    }
+	// start = get_time();
+	gettimeofday(&tp_start, NULL);
+	while (1)
+	{
+		gettimeofday(&tp_cur, NULL);
+		printf("mili %lu\n", get_time(tp_cur) - get_time(tp_start));
+		sleep_divide(1000);
+	}
+	return (0);
 }

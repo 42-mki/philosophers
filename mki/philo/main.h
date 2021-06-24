@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   main.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/10 20:58:46 by mki               #+#    #+#             */
-/*   Updated: 2021/06/12 12:24:59 by mki              ###   ########.fr       */
+/*   Updated: 2021/06/22 13:41:23 by mki              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,28 +37,27 @@
 ** pthread_mutex_unlock()	->	pthread.h
 */
 
-# define TAKE	0
-# define EAT	1
-# define SLEEP	2
-# define THINK	3
-# define DIE	4
+# define TAKE	1
+# define EAT	2
+# define SLEEP	3
+# define THINK	4
+# define DIE	5
 
 typedef struct		s_philo
 {
+	int				number;
+	int				state;
 	int				time_eat;
 	int				last_eat;
-	int				state;
-	int				number;
 }					t_philo;
 
 typedef struct		s_var
 {
-	int				num_of_philos;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				time_must_eat;
-	int				end;
+	unsigned int	num_of_philos;
+	unsigned int	time_to_die;
+	unsigned int	time_to_eat;
+	unsigned int	time_to_sleep;
+	unsigned int	time_must_eat;
 	unsigned int	base_time;
 	unsigned int	cur_time;
 	t_philo			*philos;
@@ -72,6 +71,9 @@ int					ft_atoi(const char *str);
 void				ft_putstr_fd(char *s, int fd);
 char				*ft_itoa(int n);
 unsigned long		init_time(void);
-unsigned long		get_time(unsigned long time);
+long				get_time(void);
+void				my_usleep(int wait_mili_time);
+void				*pthread_routine(void *arg);
+void				*pthread_print(void *arg);
 
 #endif

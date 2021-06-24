@@ -6,11 +6,11 @@
 /*   By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 21:11:36 by mki               #+#    #+#             */
-/*   Updated: 2021/06/12 12:05:50 by mki              ###   ########.fr       */
+/*   Updated: 2021/06/22 12:27:38 by mki              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include <unistd.h>
 
 size_t	ft_strlen(const char *s)
 {
