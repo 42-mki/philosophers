@@ -6,30 +6,11 @@
 /*   By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/10 20:58:36 by mki               #+#    #+#             */
-/*   Updated: 2021/06/24 13:56:27 by mki              ###   ########.fr       */
+/*   Updated: 2021/06/24 21:42:45 by mki              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
-
-/*
-** a
-*/
-
-int		philo(t_var *v)
-{
-	int	i;
-
-	i = -1;
-	while (++i < v->num_of_philos)
-	{
-		pthread_create(&(v->tids)[i], NULL, pthread_routine, NULL);
-		pthread_detach(v->tids[i]);
-	}
-	pthread_create(&v->tid_print, NULL, pthread_print, NULL);
-	pthread_join(v->tid_print, NULL);
-	return (0);
-}
 
 /*
 ** base_time
@@ -39,38 +20,70 @@ int		philo(t_var *v)
 ** mutexes
 */
 
-void	init(t_var *v)
+void	init(t_global *global, t_philo **philo)
 {
 	int	i;
 
-	v->base_time = get_time();
-	v->cur_time = 0;
+	global->base_time = get_time();
+	global->cur_time = 0;
+	global->monitor_flag = 0;
+	global->fork = malloc(sizeof(int) * global->num_of_philos);
+	memset(global->fork, -1, global->num_of_philos);
+	global->thread_id = malloc(sizeof(pthread_t) * global->num_of_philos);
+	global->mutex_id = malloc(sizeof(pthread_mutex_t) * global->num_of_philos);
 	i = -1;
-	v->philos = malloc(sizeof(t_philo) * v->num_of_philos);
-	while (++i < v->num_of_philos)
+	while (++i < global->num_of_philos)
+		pthread_mutex_init(&(global->mutex_id)[i], NULL);
+	i = -1;
+	*philo = malloc(sizeof(t_philo) * global->num_of_philos);
+	while (++i < global->num_of_philos)
 	{
-		(v->philos)[i].time_eat = 0;
-		(v->philos)[i].last_eat = 0;
-		(v->philos)[i].state = 0;
-		(v->philos)[i].number = i;
+		(*philo)[i].number = i;
+		(*philo)[i].state = 0;
+		(*philo)[i].time_eat = global->base_time;
+		(*philo)[i].last_eat = global->base_time;
+		(*philo)[i].eat_cnt = 0;
+		(*philo)[i].global = global;
 	}
-	v->tids = malloc(sizeof(pthread_t) * v->num_of_philos);
-	v->mutexes = malloc(sizeof(pthread_mutex_t) * v->num_of_philos);
-	i = -1;
-	while (++i < v->num_of_philos)
-		pthread_mutex_init(&(v->mutexes)[i], NULL);
 }
 
-void	free_all(t_var *v)
+/*
+** a
+*/
+
+void	free_all(t_global *global, t_philo *philo)
 {
 	int	i;
 
-	free(v->philos);
-	free(v->tids);
-	free(v->mutexes);
+	free(philo);
+	free(global->fork);
+	free(global->thread_id);
 	i = -1;
-	while (++i < v->num_of_philos)
-		pthread_mutex_destroy(&(v->mutexes)[i]);
+	while (++i < global->num_of_philos)
+		pthread_mutex_destroy(&(global->mutex_id)[i]);
+	free(global->mutex_id);
+}
+
+/*
+** a
+*/
+
+int		philo(t_global *g)
+{
+	t_philo		*philo;
+	int			i;
+
+	i = -1;
+	init(g, &philo);
+	while (++i < g->num_of_philos)
+	{
+		pthread_create(&(g->thread_id)[i], NULL, pthread_routine, &philo[i]);
+		pthread_detach(g->thread_id[i]);
+	}
+	pthread_create(&g->tid_print, NULL, pthread_monitor, &philo);
+	pthread_join(g->tid_print, NULL);
+	free_all(g, philo);
+	return (0);
 }
 
 /*
@@ -83,23 +96,21 @@ void	free_all(t_var *v)
 
 int		main(int argc, char *argv[])
 {
-	t_var	var;
+	t_global	global;
 
 	if (argc != 5 && argc != 6)
 		ft_putstr_fd("Wrong arguments\n", 1);
 	else
 	{
-		var.num_of_philos = ft_atoi(argv[1]);
-		var.time_to_die = ft_atoi(argv[2]);
-		var.time_to_eat = ft_atoi(argv[3]);
-		var.time_to_sleep = ft_atoi(argv[4]);
-		var.time_must_eat = 0;
+		global.num_of_philos = ft_atoi(argv[1]);
+		global.time_to_die = ft_atoi(argv[2]);
+		global.time_to_eat = ft_atoi(argv[3]);
+		global.time_to_sleep = ft_atoi(argv[4]);
+		global.time_must_eat = 0;
 		if (argc == 6)
-			var.time_must_eat = ft_atoi(argv[5]);
-		init(&var);
-		philo(&var);
-		free_all(&var);
+			global.time_must_eat = ft_atoi(argv[5]);
+		philo(&global);
 	}
-	system("leaks philo");
+	// system("leaks philo");
 	return (0);
 }

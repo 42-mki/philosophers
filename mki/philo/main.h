@@ -6,7 +6,7 @@
 /*   By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/10 20:58:46 by mki               #+#    #+#             */
-/*   Updated: 2021/06/24 13:38:59 by mki              ###   ########.fr       */
+/*   Updated: 2021/06/24 21:42:03 by mki              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include <unistd.h>
 # include <sys/time.h>
 # include <pthread.h>
-
 # include <stdio.h>
 
 /*
@@ -43,30 +42,33 @@
 # define THINK	4
 # define DIE	5
 
-typedef struct		s_philo
-{
-	int				number;
-	int				state;
-	int				time_eat;
-	int				last_eat;
-}					t_philo;
-
-typedef struct		s_var
+typedef struct		s_global
 {
 	int				num_of_philos;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				time_must_eat;
-	unsigned int	base_time;
-	unsigned int	cur_time;
-	t_philo			*philos;
-	pthread_t		*tids;
+	int				*fork;
+	long			base_time;
+	long			cur_time;
+	int				monitor_flag;
+	pthread_t		*thread_id;
 	pthread_t		tid_print;
-	pthread_mutex_t	*mutexes;
-}					t_var;
+	pthread_mutex_t	*mutex_id;
+}					t_global;
 
-int					philo(t_var *var);
+typedef struct		s_philo
+{
+	int				number;
+	int				state;
+	long			time_eat;
+	long			last_eat;
+	int				eat_cnt;
+	t_global		*global;
+}					t_philo;
+
+int					philo(t_global *global);
 int					ft_atoi(const char *str);
 void				ft_putstr_fd(char *s, int fd);
 char				*ft_itoa(int n);
@@ -74,6 +76,9 @@ unsigned long		init_time(void);
 long				get_time(void);
 void				my_usleep(int wait_mili_time);
 void				*pthread_routine(void *arg);
-void				*pthread_print(void *arg);
+void				*pthread_monitor(void *arg);
+void				taken_fork(t_global *global, int fork_num, int philo_num);
+void				return_fork(t_global *global, int num);
+void				print_state(int time, int number, int state);
 
 #endif
