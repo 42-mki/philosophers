@@ -6,7 +6,7 @@
 /*   By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/10 20:58:36 by mki               #+#    #+#             */
-/*   Updated: 2021/06/24 13:39:21 by mki              ###   ########.fr       */
+/*   Updated: 2021/06/24 13:56:27 by mki              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,11 +97,7 @@ int		main(int argc, char *argv[])
 		if (argc == 6)
 			var.time_must_eat = ft_atoi(argv[5]);
 		init(&var);
-		if (philo(&var))
-		{
-			free_all(&var);
-			return (0);
-		}
+		philo(&var);
 		free_all(&var);
 	}
 	system("leaks philo");
