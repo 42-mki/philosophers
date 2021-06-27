@@ -6,7 +6,7 @@
 /*   By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/10 20:58:46 by mki               #+#    #+#             */
-/*   Updated: 2021/06/27 15:27:33 by mki              ###   ########.fr       */
+/*   Updated: 2021/06/27 17:41:26 by mki              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,6 @@ void				*pthread_monitor(void *arg);
 void				taken_fork(t_philo *philo, int fork_num, int philo_num);
 void				return_fork(t_philo *philo, int right_fork, int left_fork);
 void				print_state
-(pthread_mutex_t *mutex, int time, int number, int state);
+(t_global *global, int time, int number, int state);
 
 #endif

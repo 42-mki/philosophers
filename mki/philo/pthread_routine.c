@@ -6,7 +6,7 @@
 /*   By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/24 13:32:44 by mki               #+#    #+#             */
-/*   Updated: 2021/06/27 17:27:54 by mki              ###   ########.fr       */
+/*   Updated: 2021/06/27 17:41:25 by mki              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	eating(t_philo *philo)
 	{
 		philo->state = EAT;
 		philo->last_eat = get_time();
-		print_state(&philo->global->mutex_print,
+		print_state(philo->global,
 		get_time() - philo->global->base_time, philo->number, philo->state);
 		philo->eat_cnt++;
 	}
@@ -37,7 +37,7 @@ void	eating(t_philo *philo)
 void	sleeping(t_philo *philo)
 {
 	philo->state = SLEEP;
-	print_state(&philo->global->mutex_print,
+	print_state(philo->global,
 	get_time() - philo->global->base_time, philo->number, philo->state);
 	return_fork(philo, philo->right_fork, philo->left_fork);
 	my_usleep(philo->global->time_to_sleep);
@@ -46,7 +46,7 @@ void	sleeping(t_philo *philo)
 void	thinking(t_philo *philo)
 {
 	philo->state = THINK;
-	print_state(&philo->global->mutex_print,
+	print_state(philo->global,
 	get_time() - philo->global->base_time, philo->number, philo->state);
 }
 
