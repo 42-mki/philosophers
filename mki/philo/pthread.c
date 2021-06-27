@@ -6,7 +6,7 @@
 /*   By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/24 13:32:44 by mki               #+#    #+#             */
-/*   Updated: 2021/06/24 22:14:47 by mki              ###   ########.fr       */
+/*   Updated: 2021/06/25 16:31:48 by mki              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,52 +17,45 @@ void	*pthread_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	printf("num: %d\n", philo->number);
 	while (1)
 	{
-		taken_fork(philo->global, philo->number, philo->number);
-		if (philo->number == 0)
-			taken_fork(philo->global, philo->global->num_of_philos - 1, philo->number);
-		else
-			taken_fork(philo->global, philo->number - 1, philo->number);
-		// if ( && eating())
-		// 	break ;
-		// return_fork();
-		// return_fork();
-		// if (sleeping())
-		// 	break ;
-		// if (thinking())
-		// 	break ;
+		if (philo->number % 2 == 1)
+			usleep(200);
+		taken_fork(philo, philo->right_fork, philo->number);
+		taken_fork(philo, philo->left_fork, philo->number);
+		if (philo->global->fork[philo->left_fork] == philo->number &&
+			philo->global->fork[philo->right_fork] == philo->number)
+		{
+			philo->state = EAT;
+			print_state(&philo->global->mutex_print,
+			get_time() - philo->global->base_time, philo->number, philo->state);
+		}
+		my_usleep(philo->global->time_to_eat);
+		philo->eat_cnt++;
+		philo->state = SLEEP;
+		print_state(&philo->global->mutex_print,
+		get_time() - philo->global->base_time, philo->number, philo->state);
+		return_fork(philo, philo->right_fork, philo->left_fork);
+		usleep(100);
+		my_usleep(philo->global->time_to_sleep);
+		philo->state = THINK;
+		print_state(&philo->global->mutex_print,
+		get_time() - philo->global->base_time, philo->number, philo->state);
+		usleep(100);
 	}
 	return (arg);
 }
 
 void	*pthread_monitor(void *arg)
 {
-	// t_philo	*philos;
-	// long	cur_time;
-	// int		time_to_die;
-	// int		num_of_philos;
-	// int		i;
+	int		num_of_philos;
+	t_philo	**philo;
 
-	// philos = (t_philo *)arg;
-	// time_to_die = philos[0]->global->time_to_die;
-	// num_of_philos = philos[0]->global->num_of_philos;
-	// i = -1;
-	// while (!philos[0]->global->monitor_flag)
-	// {
-	// 	while (++i < num_of_philos)
-	// 	{
-	// 		cur_time = get_time();
-	// 		printf("%lu\n", cur_time);
-	// 		if (cur_time - philos[i]->last_eat >= time_to_die)
-	// 		{
-	// 			print_state(cur_time - philos[i]->last_eat, i, DIE);
-	// 			philos[i]->global->monitor_flag = 1;
-	// 			break ;
-	// 		}
-	// 	}
-	// 	my_usleep(1);
-	// }
+	philo = (t_philo **)arg;
+	num_of_philos = (*philo)[0].global->num_of_philos;
+	while (1)
+	{
+		usleep(100);
+	}
 	return (arg);
 }

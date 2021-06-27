@@ -6,7 +6,7 @@
 /*   By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/10 20:58:46 by mki               #+#    #+#             */
-/*   Updated: 2021/06/24 21:42:03 by mki              ###   ########.fr       */
+/*   Updated: 2021/06/25 16:31:26 by mki              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,16 @@ typedef struct		s_global
 	pthread_t		*thread_id;
 	pthread_t		tid_print;
 	pthread_mutex_t	*mutex_id;
+	pthread_mutex_t	mutex_print;
 }					t_global;
 
 typedef struct		s_philo
 {
 	int				number;
+	int				left_fork;
+	int				right_fork;
+	int				old_state;
 	int				state;
-	long			time_eat;
 	long			last_eat;
 	int				eat_cnt;
 	t_global		*global;
@@ -77,8 +80,8 @@ long				get_time(void);
 void				my_usleep(int wait_mili_time);
 void				*pthread_routine(void *arg);
 void				*pthread_monitor(void *arg);
-void				taken_fork(t_global *global, int fork_num, int philo_num);
-void				return_fork(t_global *global, int num);
-void				print_state(int time, int number, int state);
+void				taken_fork(t_philo *philo, int fork_num, int philo_num);
+void				return_fork(t_philo *philo, int right_fork, int left_fork);
+void				print_state(pthread_mutex_t *mutex, int time, int number, int state);
 
 #endif

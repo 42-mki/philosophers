@@ -6,7 +6,7 @@
 /*   By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/10 20:58:36 by mki               #+#    #+#             */
-/*   Updated: 2021/06/24 21:42:45 by mki              ###   ########.fr       */
+/*   Updated: 2021/06/25 16:29:24 by mki              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,29 +20,41 @@
 ** mutexes
 */
 
-void	init(t_global *global, t_philo **philo)
+void	init_global(t_global *global)
 {
 	int	i;
 
 	global->base_time = get_time();
 	global->cur_time = 0;
 	global->monitor_flag = 0;
-	global->fork = malloc(sizeof(int) * global->num_of_philos);
-	memset(global->fork, -1, global->num_of_philos);
-	global->thread_id = malloc(sizeof(pthread_t) * global->num_of_philos);
 	global->mutex_id = malloc(sizeof(pthread_mutex_t) * global->num_of_philos);
 	i = -1;
 	while (++i < global->num_of_philos)
 		pthread_mutex_init(&(global->mutex_id)[i], NULL);
+	pthread_mutex_init(&global->mutex_print, NULL);
+	global->fork = malloc(sizeof(int) * global->num_of_philos);
+	memset(global->fork, -1, global->num_of_philos);
+	global->thread_id = malloc(sizeof(pthread_t) * global->num_of_philos);
+}
+
+void	init_philo(t_global *global, t_philo **philo)
+{
+	int	i;
+	
 	i = -1;
 	*philo = malloc(sizeof(t_philo) * global->num_of_philos);
 	while (++i < global->num_of_philos)
 	{
 		(*philo)[i].number = i;
 		(*philo)[i].state = 0;
-		(*philo)[i].time_eat = global->base_time;
+		(*philo)[i].old_state = 0;
 		(*philo)[i].last_eat = global->base_time;
 		(*philo)[i].eat_cnt = 0;
+		if (i == 0)
+			(*philo)[i].left_fork = global->num_of_philos - 1;
+		else
+			(*philo)[i].left_fork = i - 1;
+		(*philo)[i].right_fork = i;
 		(*philo)[i].global = global;
 	}
 }
@@ -61,6 +73,7 @@ void	free_all(t_global *global, t_philo *philo)
 	i = -1;
 	while (++i < global->num_of_philos)
 		pthread_mutex_destroy(&(global->mutex_id)[i]);
+	pthread_mutex_destroy(&global->mutex_print);
 	free(global->mutex_id);
 }
 
@@ -74,7 +87,8 @@ int		philo(t_global *g)
 	int			i;
 
 	i = -1;
-	init(g, &philo);
+	init_philo(g, &philo);
+	init_global(g);
 	while (++i < g->num_of_philos)
 	{
 		pthread_create(&(g->thread_id)[i], NULL, pthread_routine, &philo[i]);
