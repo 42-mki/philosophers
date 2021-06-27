@@ -6,7 +6,7 @@
 /*   By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/10 20:58:36 by mki               #+#    #+#             */
-/*   Updated: 2021/06/25 16:29:24 by mki              ###   ########.fr       */
+/*   Updated: 2021/06/27 17:32:59 by mki              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	init_global(t_global *global)
 void	init_philo(t_global *global, t_philo **philo)
 {
 	int	i;
-	
+
 	i = -1;
 	*philo = malloc(sizeof(t_philo) * global->num_of_philos);
 	while (++i < global->num_of_philos)
@@ -48,7 +48,7 @@ void	init_philo(t_global *global, t_philo **philo)
 		(*philo)[i].number = i;
 		(*philo)[i].state = 0;
 		(*philo)[i].old_state = 0;
-		(*philo)[i].last_eat = global->base_time;
+		(*philo)[i].last_eat = get_time();
 		(*philo)[i].eat_cnt = 0;
 		if (i == 0)
 			(*philo)[i].left_fork = global->num_of_philos - 1;
@@ -59,44 +59,26 @@ void	init_philo(t_global *global, t_philo **philo)
 	}
 }
 
-/*
-** a
-*/
-
-void	free_all(t_global *global, t_philo *philo)
-{
-	int	i;
-
-	free(philo);
-	free(global->fork);
-	free(global->thread_id);
-	i = -1;
-	while (++i < global->num_of_philos)
-		pthread_mutex_destroy(&(global->mutex_id)[i]);
-	pthread_mutex_destroy(&global->mutex_print);
-	free(global->mutex_id);
-}
-
-/*
-** a
-*/
-
-int		philo(t_global *g)
+int		philo(t_global *global)
 {
 	t_philo		*philo;
 	int			i;
 
 	i = -1;
-	init_philo(g, &philo);
-	init_global(g);
-	while (++i < g->num_of_philos)
+	init_philo(global, &philo);
+	init_global(global);
+	while (++i < global->num_of_philos)
 	{
-		pthread_create(&(g->thread_id)[i], NULL, pthread_routine, &philo[i]);
-		pthread_detach(g->thread_id[i]);
+		pthread_create(&(global->thread_id)[i],
+		NULL, pthread_routine, &philo[i]);
+		pthread_detach(global->thread_id[i]);
 	}
-	pthread_create(&g->tid_print, NULL, pthread_monitor, &philo);
-	pthread_join(g->tid_print, NULL);
-	free_all(g, philo);
+	pthread_create(&global->tid_print, NULL, pthread_monitor, &philo);
+	pthread_join(global->tid_print, NULL);
+	i = -1;
+	while (++i < global->num_of_philos)
+		pthread_mutex_destroy(&(global->mutex_id)[i]);
+	pthread_mutex_destroy(&global->mutex_print);
 	return (0);
 }
 
@@ -121,10 +103,10 @@ int		main(int argc, char *argv[])
 		global.time_to_eat = ft_atoi(argv[3]);
 		global.time_to_sleep = ft_atoi(argv[4]);
 		global.time_must_eat = 0;
+		global.time_must_eat_flag = 0;
 		if (argc == 6)
 			global.time_must_eat = ft_atoi(argv[5]);
 		philo(&global);
 	}
-	// system("leaks philo");
 	return (0);
 }

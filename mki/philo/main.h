@@ -6,7 +6,7 @@
 /*   By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/10 20:58:46 by mki               #+#    #+#             */
-/*   Updated: 2021/06/25 16:31:26 by mki              ###   ########.fr       */
+/*   Updated: 2021/06/27 15:27:33 by mki              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@
 # define SLEEP	3
 # define THINK	4
 # define DIE	5
+# define FULL	6
 
 typedef struct		s_global
 {
@@ -49,6 +50,7 @@ typedef struct		s_global
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				time_must_eat;
+	int				time_must_eat_flag;
 	int				*fork;
 	long			base_time;
 	long			cur_time;
@@ -82,6 +84,7 @@ void				*pthread_routine(void *arg);
 void				*pthread_monitor(void *arg);
 void				taken_fork(t_philo *philo, int fork_num, int philo_num);
 void				return_fork(t_philo *philo, int right_fork, int left_fork);
-void				print_state(pthread_mutex_t *mutex, int time, int number, int state);
+void				print_state
+(pthread_mutex_t *mutex, int time, int number, int state);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/11 14:03:42 by mki               #+#    #+#              #
-#    Updated: 2021/06/25 16:33:48 by mki              ###   ########.fr        #
+#    Updated: 2021/06/27 17:32:31 by mki              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,8 @@ FILES		=	action\
 				ft_putstr_fd\
 				main\
 				print\
-				pthread\
+				pthread_monitor\
+				pthread_routine\
 				time
 
 DIR			=	./
@@ -36,16 +37,17 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $^ -o $@
-	./$(NAME) 5 800 200 200
+#	./$(NAME) 3 800 200 200 1
 #	./$(NAME) 1 800 200 200
 #	./$(NAME) 2 800 200 200
 #	./$(NAME) 200 800 200 200
 #	./$(NAME) 500 800 200 200
+#	./$(NAME) 5 800 200 200
 #	./$(NAME) 5 800 200 200 7
 #	./$(NAME) 4 410 200 200
 #	./$(NAME) 4 310 200 100
-#	norminette *.c *.h
-	make fclean
+	norminette *.c *.h
+#	make fclean
 
 clean:
 	$(RM) $(OBJS)
