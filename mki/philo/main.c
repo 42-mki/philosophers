@@ -6,7 +6,7 @@
 /*   By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/10 20:58:36 by mki               #+#    #+#             */
-/*   Updated: 2021/06/27 18:58:12 by mki              ###   ########.fr       */
+/*   Updated: 2021/06/27 20:21:04 by mki              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ void	init_global(t_global *global)
 	global->base_time = get_time();
 	global->cur_time = 0;
 	global->monitor_flag = 0;
-	global->mutex_id = malloc(sizeof(pthread_mutex_t) * global->num_of_philos);
+	global->mutex_id = malloc(sizeof(pthread_mutex_t) * global->num_of_philos * 2);
 	i = -1;
 	while (++i < global->num_of_philos)
 		pthread_mutex_init(&(global->mutex_id)[i], NULL);
 	pthread_mutex_init(&global->mutex_print, NULL);
-	global->fork = malloc(sizeof(int) * global->num_of_philos);
+	global->fork = malloc(sizeof(int) * global->num_of_philos * 2);
 	memset(global->fork, -1, global->num_of_philos);
-	global->thread_id = malloc(sizeof(pthread_t) * global->num_of_philos);
+	global->thread_id = malloc(sizeof(pthread_t) * global->num_of_philos * 2);
 }
 
 void	init_philo(t_global *global, t_philo **philo)
@@ -42,7 +42,7 @@ void	init_philo(t_global *global, t_philo **philo)
 	int	i;
 
 	i = -1;
-	*philo = malloc(sizeof(t_philo) * global->num_of_philos);
+	*philo = malloc(sizeof(t_philo) * global->num_of_philos * 2);
 	while (++i < global->num_of_philos)
 	{
 		(*philo)[i].number = i;

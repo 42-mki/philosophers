@@ -6,7 +6,7 @@
 /*   By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/24 13:32:44 by mki               #+#    #+#             */
-/*   Updated: 2021/06/27 17:41:25 by mki              ###   ########.fr       */
+/*   Updated: 2021/06/27 20:09:24 by mki              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,11 @@ void	thinking(t_philo *philo)
 
 void	*pthread_routine(void *arg)
 {
-	t_philo	*philo;
+	t_philo		*philo;
+	t_global	*global;
 
 	philo = (t_philo *)arg;
+	global = philo->global;
 	while (1)
 	{
 		usleep(100);
