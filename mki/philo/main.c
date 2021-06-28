@@ -6,7 +6,7 @@
 /*   By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/10 20:58:36 by mki               #+#    #+#             */
-/*   Updated: 2021/06/27 20:21:04 by mki              ###   ########.fr       */
+/*   Updated: 2021/06/28 20:31:46 by mki              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ void	init_global(t_global *global)
 	global->base_time = get_time();
 	global->cur_time = 0;
 	global->monitor_flag = 0;
-	global->mutex_id = malloc(sizeof(pthread_mutex_t) * global->num_of_philos * 2);
+	global->mutex_id = malloc(sizeof(pthread_mutex_t) * global->num_of_philos);
 	i = -1;
 	while (++i < global->num_of_philos)
 		pthread_mutex_init(&(global->mutex_id)[i], NULL);
 	pthread_mutex_init(&global->mutex_print, NULL);
-	global->fork = malloc(sizeof(int) * global->num_of_philos * 2);
+	global->fork = malloc(sizeof(int) * global->num_of_philos);
 	memset(global->fork, -1, global->num_of_philos);
-	global->thread_id = malloc(sizeof(pthread_t) * global->num_of_philos * 2);
+	global->thread_id = malloc(sizeof(pthread_t) * global->num_of_philos);
 }
 
 void	init_philo(t_global *global, t_philo **philo)
@@ -42,7 +42,7 @@ void	init_philo(t_global *global, t_philo **philo)
 	int	i;
 
 	i = -1;
-	*philo = malloc(sizeof(t_philo) * global->num_of_philos * 2);
+	*philo = malloc(sizeof(t_philo) * global->num_of_philos);
 	while (++i < global->num_of_philos)
 	{
 		(*philo)[i].number = i;
@@ -59,6 +59,20 @@ void	init_philo(t_global *global, t_philo **philo)
 	}
 }
 
+void	mutex_destroy(t_global *global)
+{
+	int			i;
+
+	i = -1;
+	while (++i < global->num_of_philos)
+	{
+		usleep(10);
+		pthread_mutex_destroy(&(global->mutex_id)[i]);
+	}
+	usleep(10);
+	pthread_mutex_destroy(&global->mutex_print);
+}
+
 int		philo(t_global *global)
 {
 	t_philo		*philo;
@@ -73,12 +87,14 @@ int		philo(t_global *global)
 		NULL, pthread_routine, &philo[i]);
 		pthread_detach(global->thread_id[i]);
 	}
-	pthread_create(&global->tid_print, NULL, pthread_monitor, &philo);
-	pthread_join(global->tid_print, NULL);
-	i = -1;
-	while (++i < global->num_of_philos)
-		pthread_mutex_destroy(&(global->mutex_id)[i]);
-	pthread_mutex_destroy(&global->mutex_print);
+	while (1)
+	{
+		if (time_must_eat_monitor(philo, global))
+			break ;
+		if (time_to_die_monitor(philo, global))
+			break ;
+	}
+	mutex_destroy(global);
 	return (0);
 }
 

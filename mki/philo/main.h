@@ -6,7 +6,7 @@
 /*   By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/10 20:58:46 by mki               #+#    #+#             */
-/*   Updated: 2021/06/27 17:41:26 by mki              ###   ########.fr       */
+/*   Updated: 2021/06/28 20:02:56 by mki              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,12 @@ unsigned long		init_time(void);
 long				get_time(void);
 void				my_usleep(int wait_mili_time);
 void				*pthread_routine(void *arg);
-void				*pthread_monitor(void *arg);
-void				taken_fork(t_philo *philo, int fork_num, int philo_num);
+void				taken_fork
+(t_philo *philo, int left, int right, int philo_num);
 void				return_fork(t_philo *philo, int right_fork, int left_fork);
 void				print_state
 (t_global *global, int time, int number, int state);
+int					time_must_eat_monitor(t_philo *philo, t_global *global);
+int					time_to_die_monitor(t_philo *philo, t_global *global);
 
 #endif

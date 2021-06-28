@@ -6,7 +6,7 @@
 /*   By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/24 13:32:44 by mki               #+#    #+#             */
-/*   Updated: 2021/06/27 20:09:24 by mki              ###   ########.fr       */
+/*   Updated: 2021/06/28 20:03:08 by mki              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,8 @@
 void	take_fork(t_philo *philo)
 {
 	if (philo->number % 2 == 1)
-		usleep(200);
-	taken_fork(philo, philo->right_fork, philo->number);
-	taken_fork(philo, philo->left_fork, philo->number);
+		usleep(300);
+	taken_fork(philo, philo->left_fork, philo->right_fork, philo->number);
 }
 
 void	eating(t_philo *philo)
@@ -59,12 +58,18 @@ void	*pthread_routine(void *arg)
 	global = philo->global;
 	while (1)
 	{
-		usleep(100);
 		take_fork(philo);
+		usleep(200);
+		if (global->monitor_flag == 1)
+			break ;
 		eating(philo);
-		usleep(100);
+		usleep(200);
+		if (global->monitor_flag == 1)
+			break ;
 		sleeping(philo);
-		usleep(100);
+		usleep(200);
+		if (global->monitor_flag == 1)
+			break ;
 		thinking(philo);
 	}
 	return (arg);

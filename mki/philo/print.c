@@ -6,7 +6,7 @@
 /*   By: mki <mki@student.42seoul.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/24 17:04:35 by mki               #+#    #+#             */
-/*   Updated: 2021/06/27 19:08:37 by mki              ###   ########.fr       */
+/*   Updated: 2021/06/28 19:46:44 by mki              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@ void	print_time_num(t_global *global, int time, int number, char *str)
 
 void	print_state(t_global *global, int time, int number, int state)
 {
-	if (!global->monitor_flag && state == TAKE)
+	if (global->monitor_flag && state == DIE)
+		print_time_num(global, time, number + 1, "died\n");
+	else if (!global->monitor_flag && state == TAKE)
 		print_time_num(global, time, number + 1, "has taken a fork\n");
 	else if (!global->monitor_flag && state == EAT)
 		print_time_num(global, time, number + 1, "is eating\n");
@@ -39,6 +41,4 @@ void	print_state(t_global *global, int time, int number, int state)
 		print_time_num(global, time, number + 1, "is sleeping\n");
 	else if (!global->monitor_flag && state == THINK)
 		print_time_num(global, time, number + 1, "is thinking\n");
-	else if (!global->monitor_flag && state == DIE)
-		print_time_num(global, time, number + 1, "died\n");
 }
